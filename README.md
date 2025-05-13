@@ -1,60 +1,71 @@
-# Content Free Grammar Project
+# 📘 Context-Free Grammar (CFG) in Automata — Python Code Example
 
-## Project Overview
-
-The **Content Free Grammar Project** is a tool designed to provide real-time grammar correction based on fundamental grammar rules. This project uses AI-driven models to suggest grammar improvements, helping users refine their writing. It is aimed at educational, personal, and non-commercial use, providing a simple yet effective way to enhance text quality.
-
-### Project Concept
-
-This project focuses on automating grammar correction through an intuitive web interface. It analyzes input text for grammatical errors and provides suggestions for improvements. The core objective is to create a resource for individuals who wish to improve their writing skills, particularly students and educators. By leveraging basic grammar rules, it provides quick, real-time feedback for common grammar mistakes.
-
-### Relevance to Theory of Automata
-
-This project is closely related to the **Theory of Automata** as part of the 5th-semester curriculum. The grammar correction engine is built around the principles of formal languages and automata theory, specifically focusing on the parsing and analysis of text based on context-free grammars (CFG). The project demonstrates the practical application of automata theory by implementing algorithms that simulate the behavior of finite state machines and context-free grammars for text analysis and correction.
-
-## Prerequisites
-
-Make sure you have the following installed:
-
-- Python 3.x
-- Pip (Python package installer)
-
-## Installation
-
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/your-repo/Content-Free-Grammar-Project.git
-    cd Content-Free-Grammar-Project
-    ```
-
-2. Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-## Running the Project
-
-1. To start the project, run the following:
-    ```bash
-    python app.py
-    ```
-
-2. Access the project in your web browser at `http://localhost:5000`.
-
-## Usage
-
-- Input text into the application.
-- The tool will automatically suggest grammar corrections based on predefined grammar rules.
-- Review the suggestions and apply them as needed.
-
-## Contributing
-
-If you'd like to contribute to this project, feel free to fork the repository and submit a pull request.
-
-## License
-
-This project is open-sourced under the MIT License.
+This guide explains **Context-Free Grammar (CFG)** in Automata theory and shows how to implement a parser in Python using the `lark` library.
 
 ---
 
-Thank you for using the **Content Free Grammar Project**! Keep learning and improving your writing! 🚀
+```python
+# 📄 What is CFG?
+# CFG stands for Context-Free Grammar.
+# It defines the syntactic rules for a language using recursive productions.
+
+# A CFG is a 4-tuple: G = (V, Sigma, R, S)
+# - V: Set of variables (non-terminal symbols)
+# - Sigma: Set of terminals (input alphabet)
+# - R: Set of production rules
+# - S: Start symbol
+
+# 📄 Example: CFG for Balanced Parentheses
+# V = {S}
+# Sigma = {(, )}
+# R:
+#   S → (S)
+#   S → SS
+#   S → ε (empty string)
+
+# This grammar generates:
+# "", "()", "(())", "()()", "(()())", etc.
+
+# 📦 Step 1: Install the required library
+# Run this in your terminal if not already installed:
+# pip install lark
+
+# 🧠 Step 2: Python Code Implementation
+
+from lark import Lark
+
+# Define CFG grammar using Lark syntax
+cfg_grammar = """
+    start: expr
+
+    expr: "(" expr ")"        -> parens
+        | expr expr           -> concat
+        |                     -> empty
+"""
+
+# Create a parser for the grammar
+parser = Lark(cfg_grammar, start='start')
+
+# Test input strings for validation
+test_strings = ["", "()", "(())", "()()", "(()())", "(()", "())("]
+
+# Check each string and print whether it is valid
+for s in test_strings:
+    try:
+        parser.parse(s)
+        print(f"✔ '{s}' is VALID")
+    except:
+        print(f"✘ '{s}' is INVALID")
+
+# 📄 Output:
+# ✔ '' is VALID
+# ✔ '()' is VALID
+# ✔ '(())' is VALID
+# ✔ '()()' is VALID
+# ✔ '(()())' is VALID
+# ✘ '(()' is INVALID
+# ✘ '())(' is INVALID
+
+# ✅ Summary:
+# This script demonstrates how to use a context-free grammar to validate
+# balanced parentheses using the `lark` library in Python.
